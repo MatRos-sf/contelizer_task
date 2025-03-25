@@ -1,0 +1,15 @@
+{% for message in messages %}
+    <li class="{{ message.tags }}">
+    {% if 'safe' in message.tags %}
+        {{ message|safe }}
+    {% else %}
+        {{ message }}
+    {% endif %}
+    </li>
+{% endfor %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Prześlij plik</button>
+</form>
