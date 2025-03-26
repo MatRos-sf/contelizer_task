@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Sprawdzanie tekstu</title>
+</head>
+<body>
+    <h2>Sprawdź swój tekst</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Check</button>
+    </form>
+
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+    {% if info %}
+        <p>Pesel: {{ info.pesel }}</p>
+        <p>Data urodzenia: {{ info.date_of_birth }}</p>
+        <p>Sex: {{ info.gender }}</p>
+    {% endif %}
+
+    {% if form.errors %}
+        <p style="color: red;">{{ form.text.errors.0 }}</p>
+    {% endif %}
+</body>
+</html>
