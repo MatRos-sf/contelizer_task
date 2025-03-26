@@ -1,15 +1,25 @@
-{% for message in messages %}
-    <li class="{{ message.tags }}">
-    {% if 'safe' in message.tags %}
-        {{ message|safe }}
-    {% else %}
-        {{ message }}
-    {% endif %}
-    </li>
-{% endfor %}
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Prześlij plik</button>
-</form>
+{% extends "text_processing/base.html" %}
+{% block title %}
+    Convert text
+{% endblock title %}
+{% block content %}
+    <div class="container p-5">
+        <h1 class="mt-5">Convert text file</h1>
+        <p class="lead">Choose a file and then press the button if you want to convert a text file.</p>
+        <p class="lead">
+            <b class="text-danger">Warning!</b> The file must be in text format.
+        </p>
+        <p class="lead">
+            <b class="text-danger">Warning!</b> The middle letters of the words may be mixed!
+        </p>
+        <!-- Display messages -->
+        {% for message in messages %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endfor %}
+        <div class="container w-50 p-3">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-lg">Send file</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

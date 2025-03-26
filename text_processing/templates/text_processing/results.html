@@ -1,2 +1,11 @@
-<h2>Wyniki</h2>
-{{ content|linebreaksbr }}
+{% extends "text_processing/base.html" %}
+{% block title %}
+    Results
+{% endblock title %}
+{% block content %}
+    <div class="container p-5">
+        <h1 class="mt-5">Results</h1>
+        <p class="lead">{{ content|linebreaksbr }}</p>
+        <a class="btn btn-primary btn-lg" href="{% url 'text_processing' %}">Back</a>
+    </div>
+{% endblock content %}
