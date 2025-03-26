@@ -17,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from text_processing.views import home
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("text-processing/", include("text_processing.urls")),
     path("pesel/", include("pesel_validator.urls")),
+    path("", home, name="home"),
 ]
