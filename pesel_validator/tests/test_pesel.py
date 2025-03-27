@@ -23,6 +23,17 @@ class PeselTest(TestCase):
         self.assertEqual(pesel.gender, Gender.MALE)
 
     @parameterized.expand(
+        [
+            (Pesel.generate_pesel(date_of_birth=datetime(1800, 1, 1)).pesel, 1800, 1),
+            (Pesel.generate_pesel(date_of_birth=datetime(1899, 12, 1)).pesel, 1899, 12),
+        ]
+    )
+    def test_pesel_is_from_1800_1899(self, pesel, expected_year, expected_month):
+        pesel = Pesel(pesel)
+        self.assertEqual(pesel.date_of_birth.year, expected_year)
+        self.assertEqual(pesel.date_of_birth.month, expected_month)
+
+    @parameterized.expand(
         [("00010155558", 1900, 1), ("99123189877", 1999, 12), ("53061121395", 1953, 6)]
     )
     def test_pesel_is_from_1900_1999(self, pesel, expected_year, expected_month):
@@ -41,9 +52,21 @@ class PeselTest(TestCase):
     @parameterized.expand(
         [
             ("00410195712", 2100, 1),
+            (Pesel.generate_pesel(date_of_birth=datetime(2199, 12, 1)).pesel, 2199, 12),
         ]
     )
     def test_pesel_is_from_2100_2199(self, pesel, expected_year, expected_month):
+        pesel = Pesel(pesel)
+        self.assertEqual(pesel.date_of_birth.year, expected_year)
+        self.assertEqual(pesel.date_of_birth.month, expected_month)
+
+    @parameterized.expand(
+        [
+            (Pesel.generate_pesel(date_of_birth=datetime(2200, 1, 1)).pesel, 2200, 1),
+            (Pesel.generate_pesel(date_of_birth=datetime(2299, 12, 1)).pesel, 2299, 12),
+        ]
+    )
+    def test_pesel_is_from_2200_2299(self, pesel, expected_year, expected_month):
         pesel = Pesel(pesel)
         self.assertEqual(pesel.date_of_birth.year, expected_year)
         self.assertEqual(pesel.date_of_birth.month, expected_month)
@@ -63,8 +86,6 @@ class PeselTest(TestCase):
             Pesel(pesel)
 
         self.assertEqual("Pesel must be digits", str(error_message.exception))
-
-    # TODO: invalid date of birth
 
     def test_checksum_is_invalid(self):
         pesel_str = "61080353331"
