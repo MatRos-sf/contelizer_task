@@ -7,7 +7,6 @@
         <h1 class="mt-5">Check PESEL</h1>
         <p class="lead">Type a PESEL and then press the button to check it.</p>
         <!-- Display messages -->
-        {% for message in messages %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endfor %}
         <div class="container w-50 p-3">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -16,28 +15,24 @@
             </form>
         </div>
         <div class="container w-50 p-3">
-            {% if form.error %}
-                <p class="link-danger">{{ message }} {{ form.text.errors }}</p>
-            {% else %}
-                {% if message %}
-                    <p class="link-success">{{ message }}</p>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">PESEL</th>
-                                <th scope="col">Date of birth</th>
-                                <th scope="col">Gender</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">{{ info.pesel }}</th>
-                                <td>{{ info.date_of_birth }}</td>
-                                <td>{{ info.gender|title }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                {% endif %}
+            {% if message %}
+                <p class="link-success">{{ message }}</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">PESEL</th>
+                            <th scope="col">Date of birth</th>
+                            <th scope="col">Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">{{ info.pesel }}</th>
+                            <td>{{ info.date_of_birth }}</td>
+                            <td>{{ info.gender|title }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             {% endif %}
         </div>
     </div>

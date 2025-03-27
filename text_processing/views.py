@@ -54,7 +54,7 @@ class TextProcessingFormView(FormView):
         if not self.is_text_file(file_path):
             fs.delete(file_path)
             messages.error(self.request, "File must be text.")
-            return redirect("text_processing")
+            return self.form_invalid(form)
 
         return redirect("results", filename=file_path.name)
 
@@ -63,7 +63,7 @@ class ResultsView(View):
     def get(self, request, filename) -> HttpResponse:
         file_path: Path = settings.UPLOAD_TEMP_FOLDER / filename
         if not os.path.isfile(file_path):
-            raise Http404("...")
+            raise Http404("File not found.")
 
         content = process_file(file_path, RegexPatterns.MIX_POLISH_ENGLISH.value)
         # remove file after processing
