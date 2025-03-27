@@ -1,28 +1,44 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Sprawdzanie tekstu</title>
-</head>
-<body>
-    <h2>Sprawdź swój tekst</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Check</button>
-    </form>
-
-    {% if message %}
-        <p style="color: green;">{{ message }}</p>
-    {% endif %}
-    {% if info %}
-        <p>Pesel: {{ info.pesel }}</p>
-        <p>Data urodzenia: {{ info.date_of_birth }}</p>
-        <p>Sex: {{ info.gender }}</p>
-    {% endif %}
-
-    {% if form.errors %}
-        <p style="color: red;">{{ form.text.errors.0 }}</p>
-    {% endif %}
-</body>
-</html>
+{% extends "text_processing/base.html" %}
+{% block title %}
+    Check PESEL
+{% endblock title %}
+{% block content %}
+    <div class="container p-5">
+        <h1 class="mt-5">Check PESEL</h1>
+        <p class="lead">Type a PESEL and then press the button to check it.</p>
+        <!-- Display messages -->
+        {% for message in messages %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endfor %}
+        <div class="container w-50 p-3">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-lg">Check PESEL</button>
+            </form>
+        </div>
+        <div class="container w-50 p-3">
+            {% if form.error %}
+                <p class="link-danger">{{ message }} {{ form.text.errors }}</p>
+            {% else %}
+                {% if message %}
+                    <p class="link-success">{{ message }}</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">PESEL</th>
+                                <th scope="col">Date of birth</th>
+                                <th scope="col">Gender</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">{{ info.pesel }}</th>
+                                <td>{{ info.date_of_birth }}</td>
+                                <td>{{ info.gender|title }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
