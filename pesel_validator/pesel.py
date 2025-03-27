@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from enum import StrEnum
 from typing import Dict, Optional
@@ -6,6 +7,47 @@ from typing import Dict, Optional
 class Gender(StrEnum):
     MALE = "male"
     FEMALE = "female"
+
+
+def generate_date_of_birth_in_pesel(date_of_birth):
+    year = date_of_birth.year
+    if year < 1800 or year > 2299:
+        raise ValueError("Date of birth not valid. Year must be between 1800 and 2299.")
+
+    year = date_of_birth.year
+    month = date_of_birth.month
+    if 1800 <= year <= 1899:
+        month += 80
+    elif 2000 <= year <= 2099:
+        month += 20
+    elif 2100 <= year <= 2199:
+        month += 40
+    elif 2200 <= year <= 2299:
+        month += 60
+
+    return f"{str(year)[2:4]}{str(month).zfill(2)}{str(date_of_birth.day).zfill(2)}"
+
+
+def generate_ordinal_number(gender: Optional[Gender] = None) -> str:
+    male_numbers = [str(i) for i in range(10) if i % 2 != 0]
+    female_numbers = [str(i) for i in range(10) if i % 2 == 0]
+    if not gender:
+        last_number = random.choice(male_numbers + female_numbers)
+    elif gender == Gender.MALE:
+        last_number = random.choice(male_numbers)
+    else:
+        last_number = random.choice(female_numbers)
+    numbers = list(map(str, range(10)))
+    return "".join(random.choices(numbers, k=3)) + last_number
+
+
+def find_control_number(numbers: str) -> str:
+    a, b, c, d, e, f, g, h, i, j = map(int, numbers)
+    checksum = (
+        1 * a + 3 * b + 7 * c + 9 * d + 1 * e + 3 * f + 7 * g + 9 * h + 1 * i + 3 * j
+    )
+    k = 10 - (checksum % 10)
+    return str(0) if k == 10 else str(k)
 
 
 class Pesel:
@@ -95,5 +137,13 @@ class Pesel:
         date_of_birth: Optional[datetime] = None,
         gender: Optional[Gender] = None,
     ) -> "Pesel":
-        # 1800-2299
-        raise NotImplementedError
+        if not date_of_birth:
+            year = random.choice(range(1800, 2300))
+            month = random.choice(range(1, 13))
+            day = random.choice(range(1, 28))
+            date_of_birth = datetime(year, month, day)
+
+        d = generate_date_of_birth_in_pesel(date_of_birth)
+        p = generate_ordinal_number(gender)
+        k = find_control_number(d + p)
+        return cls(d + p + k)
