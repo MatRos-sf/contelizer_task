@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.views.generic.edit import FormView
 
 from .forms import PeselForm
@@ -17,4 +19,6 @@ class PeselView(FormView):
         )
 
     def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
+        return self.render_to_response(
+            self.get_context_data(form=form), status=HTTPStatus.BAD_REQUEST
+        )
