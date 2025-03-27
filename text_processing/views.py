@@ -16,6 +16,10 @@ from .forms import TextProcessingForm
 from .text_tools import RegexPatterns, process_file
 
 
+def home(request):
+    return render(request, "text_processing/home.html")
+
+
 class TextProcessingFormView(FormView):
     template_name = "text_processing/text_processing.html"
     form_class = TextProcessingForm
@@ -41,7 +45,7 @@ class TextProcessingFormView(FormView):
 
         if not file:
             messages.error(self.request, "File must be uploaded.")
-            return redirect("text_processing", status_code=HTTPStatus.BAD_REQUEST)
+            return redirect("text_processing")
 
         # save file to tmp folder
         fs = FileSystemStorage(location=settings.UPLOAD_TEMP_FOLDER)
@@ -50,7 +54,7 @@ class TextProcessingFormView(FormView):
         if not self.is_text_file(file_path):
             fs.delete(file_path)
             messages.error(self.request, "File must be text.")
-            return redirect("text_processing", status_code=HTTPStatus.BAD_REQUEST)
+            return redirect("text_processing")
 
         return redirect("results", filename=file_path.name)
 

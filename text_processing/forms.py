@@ -3,4 +3,8 @@ from django.forms import Form
 
 
 class TextProcessingForm(Form):
-    file = forms.FileField()
+    file = forms.FileField(
+        widget=forms.ClearableFileInput(
+            attrs={"class": "form-control", "id": "formFile"}
+        )
+    )
